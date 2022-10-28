@@ -90,24 +90,32 @@ RUN git clone https://github.com/ros2/ros1_bridge
 RUN /bin/bash -c ". /ros2_humble/install/local_setup.bash &&\
                   colcon build"
 
+# Install and source vision_opencv
+RUN mkdir -p /vision_opencv/src
+WORKDIR /vision_opencv
+RUN git clone -b humble https://github.com/ros-perception/vision_opencv.git
+RUN apt install -y libboost-python-dev
+RUN /bin/bash -c ". /ros2_humble/install/local_setup.bash &&\ 
+                  rosdep install --from-paths src --ignore-src -y --rosdistro humble &&\ 
+                  colcon build --symlink-install"
+
 # Install and source gazebo installation 
 RUN sudo apt update -y && curl -sSL http://get.gazebosim.org | sh && mkdir -p /gazebo_ros_pkgs/src
 WORKDIR /gazebo_ros_pkgs
 RUN git clone -b ros2 https://github.com/ros-simulation/gazebo_ros_pkgs
-RUN /bin/bash -c ". /ros2_humble/install/local_setup.bash &&\
-                  colcon build &&\
+RUN /bin/bash -c ". /ros2_humble/install/local_setup.bash && . /vision_opencv/install/local_setup.bash &&\ 
+                  rosdep install --from-paths src --ignore-src -y --rosdistro humble &&\ 
+                  colcon build --symlink-install &&\
                   . /gazebo_ros_pkgs/install/local_setup.bash"
 
 # Set-up auto-source of workspace for user  
 ADD src/ ${WORKSPACE}/src
 RUN echo "if [ -f ${WORKSPACE}/install/setup.bash ]; then source ${WORKSPACE}/install/setup.bash; fi" >> ~/.bashrc
 
-# auto install additional ros package dependencies
-RUN apt-get update --fix-missing -y 
-RUN apt-get install -y --no-install-recommends python3-rosdep2 python3-colcon-common-extensions
-RUN rosdep fix-permissions && rosdep update 
+# auto install workspace dependencies
 RUN rosdep install -i -y -r --from-paths ${WORKSPACE}/src --rosdistro humble
 
+# auto install pip dependencies
 COPY requirements.txt ${WORKSPACE}/requirements.txt
 RUN pip3 install -r ${WORKSPACE}/requirements.txt
 
