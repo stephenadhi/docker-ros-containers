@@ -4,7 +4,6 @@ FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV QT_X11_NO_MITSHM=1
 ENV WORKSPACE="/workspaces/locobot" 
-ENV ROS_DISTRO="noetic" 
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -38,10 +37,10 @@ RUN apt install -y software-properties-common && add-apt-repository universe
 RUN apt update -y && apt install -y curl gnupg lsb-release && rm -rf /var/lib/apt/lists/*
 
 # setup sources.list
-RUN echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list
+RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
 
 # setup keys
-RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 
 # setup environment
 ENV LANG C.UTF-8
@@ -69,4 +68,7 @@ RUN mkdir -p /root/.gazebo/models && git clone https://github.com/stephenadhi/ga
 RUN echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc   
 
 # setup entrypoint
-ENTRYPOINT [bash]
+COPY ./ros_entrypoint.sh /
+
+ENTRYPOINT ["/ros_entrypoint.sh"]
+CMD ["bash"]
