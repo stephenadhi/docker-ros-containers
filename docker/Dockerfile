@@ -47,16 +47,16 @@ ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV ROS_DISTRO noetic
 
-# install ros2 packages
+# install ros packages
 RUN apt-get update -y && apt-get install -y ros-noetic-desktop-full && rm -rf /var/lib/apt/lists/*
-RUN apt update -y && apt install -y python3-pip python3-rosdep && pip3 install colcon-common-extensions vcstool
+RUN apt update -y && apt install -y python3-pip python3-rosdep && pip3 install vcstool
 
 # Set-up auto-source of workspace for user  
 ADD src/ ${WORKSPACE}/src
 RUN echo "if [ -f ${WORKSPACE}/install/setup.bash ]; then source ${WORKSPACE}/install/setup.bash; fi" >> ~/.bashrc
 
 # auto install workspace dependencies
-RUN rosdep update
+RUN rosdep init && rosdep update
 RUN rosdep install -i -y -r --from-paths ${WORKSPACE}/src --rosdistro ${ROS_DISTRO}
 
 # auto install pip dependencies
