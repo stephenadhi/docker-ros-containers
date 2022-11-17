@@ -1,9 +1,10 @@
 # install NVDIA CUDA/CUDNN on Ubuntu 22.04 environment
-FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
+FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
 
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV QT_X11_NO_MITSHM=1
 ENV WORKSPACE="/workspaces/locobot" 
+ENV ROS_DISTRO="noetic" 
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -37,19 +38,19 @@ RUN apt install -y software-properties-common && add-apt-repository universe
 RUN apt update -y && apt install -y curl gnupg lsb-release && rm -rf /var/lib/apt/lists/*
 
 # setup sources.list
-RUN echo "deb http://packages.ros.org/ros2/ubuntu jammy main" > /etc/apt/sources.list.d/ros2-latest.list
+RUN echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list
 
 # setup keys
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
 
 # setup environment
 ENV LANG C.UTF-8
 ENV LC_ALL C.UTF-8
-ENV ROS_DISTRO humble
+ENV ROS_DISTRO noetic
 
 # install ros2 packages
-RUN apt-get update -y && apt-get install -y ros-humble-desktop-full && rm -rf /var/lib/apt/lists/*
-RUN apt update -y && apt install -y python3-pip python3-rosdep2 && pip3 install colcon-common-extensions vcstool
+RUN apt-get update -y && apt-get install -y ros-noetic-desktop-full && rm -rf /var/lib/apt/lists/*
+RUN apt update -y && apt install -y python3-pip python3-rosdep && pip3 install colcon-common-extensions vcstool
 
 # Set-up auto-source of workspace for user  
 ADD src/ ${WORKSPACE}/src
@@ -57,18 +58,15 @@ RUN echo "if [ -f ${WORKSPACE}/install/setup.bash ]; then source ${WORKSPACE}/in
 
 # auto install workspace dependencies
 RUN rosdep update
-RUN rosdep install -i -y -r --from-paths ${WORKSPACE}/src --rosdistro humble
+RUN rosdep install -i -y -r --from-paths ${WORKSPACE}/src --rosdistro ${ROS_DISTRO}
 
 # auto install pip dependencies
 COPY requirements.txt ${WORKSPACE}/requirements.txt
 RUN pip3 install -r ${WORKSPACE}/requirements.txt
 
 # add gazebo models and source gazebo installation
-RUn mkdir -p /root/.gazebo/models && git clone https://github.com/stephenadhi/gazebo_models.git /root/.gazebo/models
+RUN mkdir -p /root/.gazebo/models && git clone https://github.com/stephenadhi/gazebo_models.git /root/.gazebo/models
 RUN echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc   
 
 # setup entrypoint
-COPY ./ros_entrypoint.sh /
-ENTRYPOINT ["/ros_entrypoint.sh"]
-
-CMD ["bash"]
+ENTRYPOINT [bash]
