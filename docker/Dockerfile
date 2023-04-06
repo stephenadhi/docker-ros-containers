@@ -27,6 +27,12 @@ RUN apt-get install -y --no-install-recommends zstd wget less cmake curl gnupg2 
 RUN mkdir -p /home/zedbox && cd /home/zedbox && source /opt/ros/humble/install/setup.bash && \ 
     wget https://raw.githubusercontent.com/stereolabs/zed-ros2-wrapper/master/.ci/jetson_build_humble_src.sh && \ 
     chmod +x jetson_build_humble_src.sh && ./jetson_build_humble_src.sh
+    
+RUN mkdir -p /home/zedbox/ros2_ws/src && cd /home/zedbox/ros2_ws/src && \
+    git clone --recursive https://github.com/stereolabs/zed-ros2-wrapper && cd .. && \
+    rosdep update && rosdep install --from-paths src -i -y -r && apt install python3-colcon-common-extensions
+    
+RUN colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release --parallel-workers $(nproc)
 
 # setup entrypoint
 COPY ./ros_entrypoint.sh /
