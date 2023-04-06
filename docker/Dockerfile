@@ -31,7 +31,7 @@ RUN mkdir -p /home/zedbox && cd /home/zedbox && source /opt/ros/humble/install/s
 RUN mkdir -p /home/zedbox/ros2_ws/src && cd /home/zedbox/ros2_ws/src && \
     git clone --recursive https://github.com/stereolabs/zed-ros2-wrapper && cd .. && \
     rosdep update && rosdep install --from-paths src -i -y -r && apt install python3-colcon-common-extensions && \
-    source /opt/ros/humble/install/setup.bash && \
+    source /opt/ros/humble/install/setup.bash && source install/setup.bash && \
     colcon build --symlink-install --cmake-args=-DCMAKE_BUILD_TYPE=Release --parallel-workers $(nproc)
 
 # setup entrypoint
