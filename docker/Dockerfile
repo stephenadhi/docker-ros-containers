@@ -64,7 +64,7 @@ COPY requirements.txt ${WORKSPACE}/requirements.txt
 RUN pip3 install -r ${WORKSPACE}/requirements.txt
 
 # add gazebo models and source gazebo installation
-RUn mkdir -p /root/.gazebo/models && git clone https://github.com/stephenadhi/gazebo_models.git /root/.gazebo/models
+RUN mkdir -p /root/.gazebo/models && git clone https://github.com/stephenadhi/gazebo_models.git /root/.gazebo/models
 RUN echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc   
 
 # setup entrypoint
