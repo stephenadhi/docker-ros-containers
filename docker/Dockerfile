@@ -1,9 +1,11 @@
-# install NVDIA CUDA/CUDNN on Ubuntu 22.04 environment
+# install NVDIA CUDA/CUDNN on Ubuntu 20.04 environment
 FROM nvidia/cuda:11.3.0-cudnn8-runtime-ubuntu20.04
 
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV QT_X11_NO_MITSHM=1
-ENV WORKSPACE="/workspaces/locobot" 
+ENV ROS_DISTRO=noetic
+ENV WORKSPACE="/workspaces/noetic_ws"
+RUN mkdir -p ${WORKSPACE}
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
         ca-certificates \
@@ -69,6 +71,6 @@ RUN echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc
 
 # setup entrypoint
 COPY ./ros_entrypoint.sh /
-
 ENTRYPOINT ["/ros_entrypoint.sh"]
+
 CMD ["bash"]

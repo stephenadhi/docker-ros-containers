@@ -1,11 +1,11 @@
 // useful source: https://github.com/athackst/vscode_ros2_workspace
 {
-    "name": "locobot-development",
+    "name": "noetic-development",
     "dockerFile": "../docker/Dockerfile",
     "forwardPorts": [],
     "context": "..",
-    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/locobot,type=bind",
-    "workspaceFolder": "/workspaces/locobot",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/noetic_ws,type=bind",
+    "workspaceFolder": "/workspaces/noetic_ws",
     "runArgs": [
         "--network=host",
         "--runtime=nvidia",
