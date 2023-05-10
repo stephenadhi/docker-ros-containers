@@ -24,6 +24,13 @@ Clone this repository to your local machine.
 5. Wait for the container to build. The container will be started automatically inside VSCode.
 6. You can now start developing your ROS applications inside the container.
 
+### Using GUIs with Docker
+It is possible to view GUI applications such as Gazebo and RViZ inside a docker container by using X server. The simplest way is to give access the Xserver in our host terminal. However it is not the most secure way due to compromising access control to X server on your host. 
+
+    xhost +local:root # for the lazy and reckless
+
+For further information on giving access the safer way, see the documentation  at http://wiki.ros.org/docker/Tutorials/GUI
+
 ### Contents
 
 **Dockerfile**: This folder contains the Dockerfiles 
