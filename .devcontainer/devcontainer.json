@@ -1,39 +1,32 @@
 // useful source: https://github.com/athackst/vscode_ros2_workspace
 {
-    "name": "locobot-development",
-    "dockerFile": "../docker/Dockerfile",
-    "forwardPorts": [],
-    "context": "..",
-    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/locobot,type=bind",
-    "workspaceFolder": "/workspaces/locobot",
-    "runArgs": [
-        "--network=host",
-        "--runtime=nvidia",
-        "--gpus", "all",
-        "--cap-add=SYS_PTRACE",
-        "--security-opt=seccomp:unconfined",
-        "--security-opt=apparmor:unconfined",
-        "--volume=/tmp/.X11-unix:/tmp/.X11-unix",
-        "--device=/dev/ttyUSB*",
-        "--interactive",
-        "--privileged"
-    ],
-    //Linux GUI
-    "containerEnv": { "DISPLAY": "${localEnv:DISPLAY}",
-                        "NVIDIA_VISIBLE_DEVICES": "all",
-                        "NVIDIA_DRIVER_CAPABILITIES": "all" },
-    //WIndows GUI
-    //"containerEnv": { "DISPLAY": "host.docker.internal:0.0" },
-
-    // Set *default* container specific settings.json values on container create.
-    "settings": {
-        "terminal.integrated.profiles.linux": {
-            "bash": {
-                "path": "bash"
-            },
-        },
-        "terminal.integrated.defaultProfile.linux": "bash"
-    },
-    "extensions": ["mhutchie.git-graph", "ms-python.python", "ms-vscode.cpptools", "ms-iot.vscode-ros", "smilerobotics.urdf",
-        "streetsidesoftware.code-spell-checker", "twxs.cmake", "yzhang.markdown-all-in-one"]
-        
+	"name": "foxy-development",
+	"dockerFile": "../docker/Dockerfile",
+	"forwardPorts": [],	
+	"context": "..",	
+	"workspaceMount": "source=${localWorkspaceFolder},target=/home/workspace/ros_foxy,type=bind",
+	"workspaceFolder": "/home/workspace/ros_foxy",
+	"runArgs": [
+		"--network=host",
+		"--cap-add=SYS_PTRACE",
+		"--security-opt=seccomp:unconfined",
+		"--security-opt=apparmor:unconfined",
+		"--volume=/tmp/.X11-unix:/tmp/.X11-unix",
+		"--privileged",
+	],
+	//LINUX
+	"containerEnv": { "DISPLAY": "${localEnv:DISPLAY}" },
+	//WINDOWS
+	//"containerEnv": { "DISPLAY": "host.docker.internal:0.0" },
+	// Set *default* container specific settings.json values on container create.
+	"settings": {
+		"terminal.integrated.profiles.linux": {
+			"bash": {
+				"path": "bash"
+			},
+		},
+		"terminal.integrated.defaultProfile.linux": "bash"
+	},
+	"extensions": ["mhutchie.git-graph", "ms-python.python", "ms-vscode.cpptools", "ms-iot.vscode-ros", "smilerobotics.urdf",
+		"streetsidesoftware.code-spell-checker", "twxs.cmake", "yzhang.markdown-all-in-one"]
+}
