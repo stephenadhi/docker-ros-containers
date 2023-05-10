@@ -3,7 +3,8 @@ FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04
 
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV QT_X11_NO_MITSHM=1
-ENV WORKSPACE="/workspaces/locobot" 
+ENV WORKSPACE="/workspaces/humble_ws" 
+RUN mkdir -p ${WORKSPACE}
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
         ca-certificates \
