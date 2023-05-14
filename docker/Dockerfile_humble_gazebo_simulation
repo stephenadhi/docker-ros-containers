@@ -64,7 +64,8 @@ RUN rosdep install -i -y -r --from-paths ${WORKSPACE}/src --rosdistro humble
 COPY requirements.txt ${WORKSPACE}/requirements.txt
 RUN pip3 install -r ${WORKSPACE}/requirements.txt
 
-# add gazebo models and source gazebo installation
+# Install gazebo, add gazebo models and source gazebo installation
+RUN apt update -y && apt install -y ros-humble-gazebo* --no-install-recommends
 RUN mkdir -p /root/.gazebo/models && git clone https://github.com/stephenadhi/gazebo_models.git /root/.gazebo/models
 RUN echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc   
 
