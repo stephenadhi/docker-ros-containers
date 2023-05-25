@@ -1,0 +1,21 @@
+FROM ros:humble-perception
+
+# setup environment
+ENV ROS_DISTRO humble
+SHELL ["/bin/bash", "-c"] 
+# Set-up auto-source of workspace for user  
+ADD src/ ${WORKSPACE}/src
+RUN cd ${WORKSPACE}/src && git clone -b humble https://github.com/ros-drivers/ros2_ouster_drivers.git
+RUN echo "if [ -f ${WORKSPACE}/install/setup.bash ]; then source ${WORKSPACE}/install/setup.bash; fi" >> ~/.bashrc
+
+# auto install workspace dependencies
+RUN apt update -y && rosdep update
+RUN rosdep install -i -y -r --from-paths ${WORKSPACE}/src --rosdistro ${ROS_DISTRO}
+
+RUN . /opt/ros/humble/setup.bash && cd ${WORKSPACE}/src && colcon build
+
+# setup entrypoint
+COPY ./ros_entrypoint.sh /
+ENTRYPOINT ["/ros_entrypoint.sh"]
+
+CMD ["bash"]

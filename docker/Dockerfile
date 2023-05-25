@@ -1,1 +1,1 @@
-FROM stephenadhi/ros2:humble-gazebo-simulation
+FROM stephenadhi/ros2:humble-perception-ouster
