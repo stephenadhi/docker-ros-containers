@@ -2,9 +2,12 @@ FROM ros:humble-perception
 
 # setup environment
 ENV ROS_DISTRO humble
+ENV WORKSPACE="/workspaces/humble_ws" 
+RUN mkdir -p ${WORKSPACE}
 SHELL ["/bin/bash", "-c"] 
 # Set-up auto-source of workspace for user  
 ADD src/ ${WORKSPACE}/src
+WORKDIR ${WORKSPACE}
 RUN cd ${WORKSPACE}/src && git clone -b humble https://github.com/ros-drivers/ros2_ouster_drivers.git
 RUN echo "if [ -f ${WORKSPACE}/install/setup.bash ]; then source ${WORKSPACE}/install/setup.bash; fi" >> ~/.bashrc
 
