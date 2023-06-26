@@ -1,5 +1,5 @@
 # install NVDIA CUDA/CUDNN on Ubuntu 22.04 environment
-FROM dustynv/ros:humble-ros-base-l4t-r35.2.1
+FROM nvcr.io/nvidia/isaac/ros:aarch64-ros2_humble_33836e394da2d095a59afd2d151038f8
 
 ENV JETPACK_MAJOR=5
 ENV JETPACK_MINOR=1
@@ -9,7 +9,7 @@ ENV ZED_SDK_MAJOR=4
 ENV ZED_SDK_MINOR=0
 ENV DEBIAN_FRONTEND="noninteractive"
 ENV QT_X11_NO_MITSHM=1
-ENV WORKSPACE="/workspaces/locobot" 
+ENV WORKSPACE="/workspaces/humble"
 
 #Install ZED SDK
 RUN echo "*** Installing ZED SDK v${ZED_SDK_MAJOR}.${ZED_SDK_MINOR} for Jetpack ${JETPACK_MAJOR}.${JETPACK_MINOR} (L4T v${L4T_MAJOR}.${L4T_MINOR})"
