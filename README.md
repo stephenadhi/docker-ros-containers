@@ -7,6 +7,7 @@ You need to have the following installed on your machine:
 
 - Linux PC with CUDA available
 - Docker Desktop (https://www.docker.com/products/docker-desktop)
+- Nvidia Container Toolkit (https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/nvidia-docker.html)
 - Visual Studio Code (https://code.visualstudio.com/)
 - Remote Development extension for VSCode (https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack)
 
