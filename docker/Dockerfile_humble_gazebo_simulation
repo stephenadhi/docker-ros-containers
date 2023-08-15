@@ -71,6 +71,7 @@ RUN echo "source /usr/share/gazebo/setup.sh" >> ~/.bashrc
 
 # setup entrypoint
 COPY ./ros_entrypoint.sh /
+RUN bash -c "chmod +x /ros_entrypoint.sh"
 ENTRYPOINT ["/ros_entrypoint.sh"]
 
 CMD ["bash"]
